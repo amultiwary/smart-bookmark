@@ -1,36 +1,219 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Smart Bookmark App
 
-## Getting Started
+A modern, real-time bookmark manager built with **Next.js (App Router)**, **Supabase**, and **Tailwind CSS**, featuring secure Google OAuth authentication and per-user data isolation.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌐 Live Demo
+
+🔗 https://your-vercel-url.vercel.app
+
+---
+
+## 📖 Overview
+
+Smart Bookmark is a production-ready full-stack application that allows users to:
+
+- Sign in securely using **Google OAuth**
+- Add personal bookmarks (Title + URL)
+- Delete bookmarks
+- View updates in **real-time without page refresh**
+- Access strictly private data (RLS enforced)
+
+Each user's bookmarks are fully isolated using database-level security policies.
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- Next.js 16 (App Router)
+- React (Client Components)
+- TypeScript
+- Tailwind CSS
+
+### Backend (BaaS)
+- Supabase Auth (Google OAuth)
+- Supabase PostgreSQL
+- Supabase Realtime
+- Row Level Security (RLS)
+
+### Deployment
+- Vercel
+
+---
+
+## 🔐 Authentication
+
+- Google OAuth only (no email/password)
+- Secure OAuth flow handled via Supabase
+- Environment variables configured for both local and production
+
+---
+
+## 🗄 Database Schema
+
+### Table: `bookmarks`
+
+| Column      | Type         | Description                          |
+|-------------|-------------|--------------------------------------|
+| id          | uuid        | Primary key                          |
+| user_id     | uuid        | References authenticated user        |
+| title       | text        | Bookmark title                       |
+| url         | text        | Bookmark URL                         |
+| created_at  | timestamptz | Auto-generated timestamp             |
+
+---
+
+## 🔒 Row Level Security (RLS)
+
+RLS is enabled to ensure strict per-user data access.
+
+### Policies Implemented
+
+- Users can SELECT only their own bookmarks
+- Users can INSERT only their own bookmarks
+- Users can DELETE only their own bookmarks
+
+Example policy:
+
+```sql
+auth.uid() = user_id
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This ensures complete data isolation at the database level.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚡ Real-Time Updates
 
-## Learn More
+Implemented using Supabase Realtime subscriptions.
 
-To learn more about Next.js, take a look at the following resources:
+- Subscribed to `postgres_changes`
+- Filtered per `user_id`
+- Instant sync across multiple browser tabs
+- Optimistic UI updates for immediate feedback
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Example subscription filter:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```ts
+filter: `user_id=eq.${user.id}`
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 UI Highlights
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Modern glassmorphism design
+- Eye-friendly gradient background
+- Responsive layout
+- Smooth hover animations
+- Optimistic UI updates
+- Loading state handling
+- Empty state messaging
+- Secure external link handling (`rel="noopener noreferrer"`)
+
+---
+
+## 🧠 Engineering Decisions
+
+### Why Supabase?
+- Built-in Auth + Postgres + Realtime
+- Eliminates need for custom backend
+- Production-ready security policies
+
+### Why Optimistic UI?
+- Improves perceived performance
+- Provides instant feedback
+- Maintains eventual consistency via realtime sync
+
+### Why App Router?
+- Modern Next.js architecture
+- Clean separation of concerns
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+ ├── app/
+ │    └── page.tsx
+ │
+ ├── lib/
+ │    └── supabase.ts
+```
+
+---
+
+## 🔧 Environment Variables
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+```
+
+---
+
+## ▶️ Run Locally
+
+```bash
+git clone <repository-url>
+cd smart-bookmark
+npm install
+npm run dev
+```
+
+---
+
+## 🌍 Deployment Steps
+
+1. Push project to GitHub
+2. Import repository in Vercel
+3. Add environment variables in Vercel dashboard
+4. Update:
+   - Google OAuth Authorized Origins
+   - Supabase Site URL
+   - Supabase Redirect URLs
+
+---
+
+## 📈 Key Learnings
+
+- Implementing secure OAuth flows
+- Database-level access control using RLS
+- Real-time event subscriptions
+- Optimistic UI design pattern
+- Production deployment configuration
+- Managing local vs production environments
+
+---
+
+## 🚀 Future Improvements
+
+- Edit bookmark functionality
+- Tagging and categorization
+- Drag-and-drop sorting
+- Dark/Light theme toggle
+- PWA support
+
+---
+
+## 👨‍💻 Author
+
+**Amul Tiwary**  
+MCA | NIT-BHOPAL  |  FULL STACK DEVELOPER  
+Passionate about scalable systems and real-time applications.
+
+---
+
+## ⭐ Project Highlights
+
+✔ Secure Authentication  
+✔ Private Per-User Data  
+✔ Real-Time Sync  
+✔ Modern UI  
+✔ Production Deployment  
+✔ Clean Architecture  
