@@ -40,20 +40,22 @@ export default function Home() {
 
   fetchBookmarks()
 
-  const channel = supabase
-    .channel("bookmarks-changes")
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "bookmarks",
-      },
-      () => {
-        fetchBookmarks()
-      }
-    )
-    .subscribe()
+ const channel = supabase
+  .channel("bookmarks-changes")
+  .on(
+    "postgres_changes",
+    {
+      event: "*",
+      schema: "public",
+      table: "bookmarks",
+      filter: `user_id=eq.${user.id}`,
+    },
+    (payload) => {
+      fetchBookmarks()
+    }
+  )
+  .subscribe()
+
 
   return () => {
     supabase.removeChannel(channel)
@@ -81,19 +83,28 @@ export default function Home() {
   }
 
   const addBookmark = async () => {
-    if (!title || !url || !user) return
+  if (!title || !url || !user) return
 
-    await supabase.from("bookmarks").insert([
-      {
-        title,
-        url,
-        user_id: user.id,
-      },
-    ])
-
-    setTitle("")
-    setUrl("")
+  const newBookmark = {
+    id: crypto.randomUUID(),
+    title,
+    url,
   }
+
+  setBookmarks((prev) => [newBookmark, ...prev])
+
+  setTitle("")
+  setUrl("")
+
+  await supabase.from("bookmarks").insert([
+    {
+      title,
+      url,
+      user_id: user.id,
+    },
+  ])
+}
+
 
   const deleteBookmark = async (id: string) => {
     await supabase.from("bookmarks").delete().eq("id", id)
