@@ -6,7 +6,7 @@ A modern, real-time bookmark manager built with **Next.js (App Router)**, **Supa
 
 ## 🌐 Live Demo
 
-🔗 https://your-vercel-url.vercel.app
+🔗 https://smart-bookmark-amul.vercel.app
 
 ---
 
@@ -32,14 +32,12 @@ Each user's bookmarks are fully isolated using database-level security policies.
 - TypeScript
 - Tailwind CSS
 
-### Backend (BaaS)
+### Backend & Infrastructure
 - Supabase Auth (Google OAuth)
 - Supabase PostgreSQL
 - Supabase Realtime
 - Row Level Security (RLS)
 
-### Deployment
-- Vercel
 
 ---
 
@@ -160,25 +158,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ## ▶️ Run Locally
 
 ```bash
-git clone <repository-url>
+git clone <https://github.com/amultiwary/smart-bookmark.git>
 cd smart-bookmark
 npm install
 npm run dev
 ```
 
----
 
-## 🌍 Deployment Steps
-
-1. Push project to GitHub
-2. Import repository in Vercel
-3. Add environment variables in Vercel dashboard
-4. Update:
-   - Google OAuth Authorized Origins
-   - Supabase Site URL
-   - Supabase Redirect URLs
-
----
 
 ## 📈 Key Learnings
 
@@ -191,20 +177,91 @@ npm run dev
 
 ---
 
+
+## 🔧 Challenges Faced & Solutions
+
+### 1. OAuth Redirect Mismatch
+
+**Issue:**  
+Google OAuth login failed in production after deployment.
+
+**Cause:**  
+Production domain was not added to:
+- Google Authorized JavaScript Origins
+- Supabase Site URL
+- Supabase Redirect URLs
+
+**Solution:**  
+Updated OAuth configuration on both Google Cloud and Supabase to match the Vercel production domain.
+
+---
+
+### 2. Realtime Not Triggering Initially
+
+**Issue:**  
+Bookmarks were not syncing across browser tabs.
+
+**Cause:**  
+The `bookmarks` table was not added to the `supabase_realtime` publication.
+
+**Solution:**  
+Enabled realtime by adding the table under:
+Database → Publications → supabase_realtime.
+
+---
+
+### 3. Insert Not Reflecting Immediately on Same Tab
+
+**Issue:**  
+Bookmark appeared only after switching tabs.
+
+**Cause:**  
+App relied only on realtime subscription (network delay).
+
+**Solution:**  
+Implemented Optimistic UI update before database confirmation to improve UX responsiveness.
+
+---
+
+### 4. Environment Variables Not Loading
+
+**Issue:**  
+App crashed with `supabaseUrl is required`.
+
+**Cause:**  
+Server was not restarted after creating `.env.local`.
+
+**Solution:**  
+Restarted development server and verified environment variable placement at project root.
+
+---
+
 ## 🚀 Future Improvements
 
 - Edit bookmark functionality
-- Tagging and categorization
-- Drag-and-drop sorting
-- Dark/Light theme toggle
-- PWA support
+- Tagging 
+- Dark mode
+
+---
+
+---
+
+## 🏗 Architecture Overview
+
+Client (Next.js)  
+→ Supabase Auth (Google OAuth)  
+→ Supabase PostgreSQL (RLS Enabled)  
+→ Supabase Realtime Subscription  
+→ UI State (Optimistic Update + Realtime Sync)
+
+The application uses a Backend-as-a-Service model, eliminating the need for a custom server while maintaining production-grade security.
 
 ---
 
 ## 👨‍💻 Author
 
 **Amul Tiwary**  
-MCA | NIT-BHOPAL  |  FULL STACK DEVELOPER  
+MCA Candidate | MANIT Bhopal  | Full Stack Developer
 Passionate about scalable systems and real-time applications.
 
 ---
