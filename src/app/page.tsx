@@ -115,11 +115,12 @@ export default function Home() {
     );
   }
 
-  const displayName =user?.user_metadata?.full_name || user?.email?.split("@")[0] || "";
+  const displayName =
+    user?.user_metadata?.full_name || user?.email?.split("@")[0] || "";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-xl p-8 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8">
+      <div className="w-full max-w-2xl backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl shadow-xl p-6 sm:p-8 text-white">
         {!user ? (
           <div className="text-center space-y-6">
             <h1 className="text-3xl font-bold tracking-tight">
@@ -137,9 +138,9 @@ export default function Home() {
           </div>
         ) : (
           <>
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
               <div>
-                <h2 className="text-xl font-semibold">
+                <h2 className="text-lg sm:text-xl font-semibold break-words">
                   Welcome, {displayName}
                 </h2>
                 <p className="text-white/70 text-sm">
@@ -148,61 +149,63 @@ export default function Home() {
               </div>
               <button
                 onClick={handleLogout}
-                className="bg-red-500/70 px-4 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200 hover:bg-red-500 hover:shadow-md active:scale-95"
+                className="bg-red-500/70 px-4 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200 hover:bg-red-500 hover:shadow-md active:scale-95 w-full sm:w-auto"
               >
                 Logout
               </button>
             </div>
 
-            {/* Add Bookmark */}
-            <div className="flex gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <input
                 type="text"
                 placeholder="Title"
-                className="flex-1 px-4 py-2 rounded-lg bg-white/20 placeholder-white/70 outline-none focus:ring-2 focus:ring-white"
+                className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/70 outline-none focus:ring-2 focus:ring-white"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
+
               <input
                 type="text"
                 placeholder="URL"
-                className="flex-1 px-4 py-2 rounded-lg bg-white/20 placeholder-white/70 outline-none focus:ring-2 focus:ring-white"
+                className="w-full px-4 py-2 rounded-lg bg-white/20 placeholder-white/70 outline-none focus:ring-2 focus:ring-white"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
               />
+
               <button
                 onClick={addBookmark}
-                className="bg-emerald-500 px-4 rounded-lg font-medium cursor-pointer transition-all duration-200 hover:bg-emerald-400 hover:scale-105 hover:shadow-md active:scale-95"
+                className="bg-emerald-500 px-4 py-2 rounded-lg font-medium cursor-pointer transition-all duration-200 hover:bg-emerald-400 hover:scale-105 hover:shadow-md active:scale-95 w-full sm:w-auto"
               >
                 Add
               </button>
             </div>
 
-            {/* Bookmark List */}
             {bookmarks.length === 0 ? (
               <div className="text-center text-white/70 py-10">
-                No bookmarks yet. Start by adding one 🚀
+                No bookmarks yet. Start by adding one 
               </div>
             ) : (
-              <div className="space-y-4 max-h-80 overflow-y-auto pr-2">
+              <div className="space-y-4 max-h-[50vh] sm:max-h-80 overflow-y-auto pr-1 sm:pr-2">
                 {bookmarks.map((b) => (
                   <div
                     key={b.id}
-                    className="bg-white/15 backdrop-blur-md border border-white/20 p-4 rounded-xl flex justify-between items-center hover:bg-white/20 transition"
+                    className="bg-white/15 backdrop-blur-md border border-white/20 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:bg-white/20 transition"
                   >
-                    <div>
+                    <div className="break-words">
                       <p className="font-semibold">{b.title}</p>
                       <a
                         href={b.url}
                         target="_blank"
-                        className="text-sm text-blue-200 hover:underline"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-300 hover:underline cursor-pointer break-all"
                       >
                         {b.url}
                       </a>
                     </div>
+
                     <button
                       onClick={() => deleteBookmark(b.id)}
-                      className="text-red-300 cursor-pointer transition-all duration-200 hover:text-red-500 hover:scale-110"
+                      className="text-red-300 cursor-pointer transition-all duration-200 hover:text-red-500 hover:scale-110 self-start sm:self-auto"
                     >
                       Delete
                     </button>
