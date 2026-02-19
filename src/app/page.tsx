@@ -138,8 +138,8 @@ export default function Home() {
           </div>
         ) : (
           <>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-              <div>
+            <div className="flex items-start justify-between mb-8 gap-4">
+              <div className="min-w-0">
                 <h2 className="text-lg sm:text-xl font-semibold break-words">
                   Welcome, {displayName}
                 </h2>
@@ -147,9 +147,10 @@ export default function Home() {
                   Your personal bookmark dashboard
                 </p>
               </div>
+
               <button
                 onClick={handleLogout}
-                className="bg-red-500/70 px-4 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200 hover:bg-red-500 hover:shadow-md active:scale-95 w-full sm:w-auto"
+                className="bg-red-500/70 px-4 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200 hover:bg-red-500 hover:shadow-md active:scale-95 whitespace-nowrap"
               >
                 Logout
               </button>
@@ -182,7 +183,7 @@ export default function Home() {
 
             {bookmarks.length === 0 ? (
               <div className="text-center text-white/70 py-10">
-                No bookmarks yet. Start by adding one 
+                No bookmarks yet. Start by adding one
               </div>
             ) : (
               <div className="space-y-4 max-h-[50vh] sm:max-h-80 overflow-y-auto pr-1 sm:pr-2">
